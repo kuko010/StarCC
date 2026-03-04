@@ -1,6 +1,12 @@
 package net.kuko.starcc;
 
+import dan200.computercraft.api.turtle.ITurtleUpgrade;
+import dan200.computercraft.api.upgrades.UpgradeType;
+import net.kuko.starcc.computercraft.upgrades.ExampleTurtleUpgrade;
 import net.kuko.starcc.event.ServerEvents;
+import net.kuko.starcc.registries.TurtleUpgradesRegistry;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -24,11 +30,11 @@ public class StarCC {
     public static final String MOD_ID = "starcc";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-
     public StarCC(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
+        modEventBus.addListener(TurtleUpgradesRegistry::register);
 
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new ServerEvents());

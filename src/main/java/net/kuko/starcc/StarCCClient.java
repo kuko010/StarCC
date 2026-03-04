@@ -1,6 +1,8 @@
 package net.kuko.starcc;
 
 import dan200.computercraft.api.client.turtle.RegisterTurtleModellersEvent;
+import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller;
+import net.kuko.starcc.registries.TurtleUpgradesRegistry;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,12 +20,11 @@ public class StarCCClient {
         // Allows NeoForge to create a config screen for this mod's configs.
         // The config screen is accessed by going to the Mods screen > clicking on your mod > clicking on config.
         // Do not forget to add translations for your config options to the en_us.json file.
-
     }
 
     @SubscribeEvent
     public static void registerTurtleModellers(RegisterTurtleModellersEvent event) {
-//        event.register(TurtleUpgradesRegistry.EXAMPLE_TURTLE_UPGRADE, TurtleUpgradeModeller.flatItem());
+        event.register(TurtleUpgradesRegistry.EXAMPLE_TURTLE_UPGRADE, TurtleUpgradeModeller.flatItem());
     }
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
