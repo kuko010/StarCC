@@ -1,5 +1,13 @@
 package net.kuko.starcc;
 
+import net.kuko.starcc.event.ServerEvents;
+import net.minecraft.locale.Language;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -15,19 +23,23 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 
+import java.util.List;
+
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
-@Mod(StarComputerCraft.MOD_ID)
-public class StarComputerCraft {
+@Mod(StarCC.MOD_ID)
+public class StarCC {
     public static final String MOD_ID = "starcc";
     public static final Logger LOGGER = LogUtils.getLogger();
 
 
-    public StarComputerCraft(IEventBus modEventBus, ModContainer modContainer) {
+    public StarCC(IEventBus modEventBus, ModContainer modContainer) {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
 
+
         NeoForge.EVENT_BUS.register(this);
+        NeoForge.EVENT_BUS.register(new ServerEvents());
         modEventBus.addListener(this::addCreative);
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
@@ -35,6 +47,8 @@ public class StarComputerCraft {
     private void commonSetup(FMLCommonSetupEvent event) {
 
     }
+
+
 
     // Add the example block item to the building blocks tab
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
@@ -49,4 +63,6 @@ public class StarComputerCraft {
         // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
+
+
 }
