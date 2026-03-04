@@ -16,24 +16,29 @@ public class ServerEvents {
             if (!player.level().isClientSide) {
                 if (player.tickCount % 20 != 0) return;
                 //region Getting the libtooltips translation values from stack on server
-                boolean logging = false;
-                ItemStack stack = player.getMainHandItem();
-                if (stack.isEmpty()) return;
 
-                String id = stack.getItem().getDescriptionId();
-                Language lang = Language.getInstance();
-                String tooltipBase = id.replace("item.", "tooltip.");
-
-                StringBuilder description = new StringBuilder();
-                int i = 0;
-                while (lang.has(tooltipBase + "." + i)) {
-                    description.append(lang.getOrDefault(tooltipBase + "." + i).replaceAll("<[^>]+>", "")).append("\n");
-                    i++;
-                }
-
-                if (!description.isEmpty() && logging) StarCC.LOGGER.info(String.valueOf(description));
                 //endregion
             }
         }
+    }
+
+
+    public static StringBuilder getTranslationsAsString(ItemStack stack) {
+        boolean logging = false;
+        if (stack.isEmpty()) return null;
+
+        String id = stack.getItem().getDescriptionId();
+        Language lang = Language.getInstance();
+        String tooltipBase = id.replace("item.", "tooltip.");
+
+        StringBuilder description = new StringBuilder();
+        int i = 0;
+        while (lang.has(tooltipBase + "." + i)) {
+            description.append(lang.getOrDefault(tooltipBase + "." + i).replaceAll("<[^>]+>", "")).append("\n");
+            i++;
+        }
+
+        if (!description.isEmpty()) return description;
+        return null;
     }
 }
