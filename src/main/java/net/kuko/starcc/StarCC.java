@@ -1,12 +1,7 @@
 package net.kuko.starcc;
 
-import dan200.computercraft.api.turtle.ITurtleUpgrade;
-import dan200.computercraft.api.upgrades.UpgradeType;
-import net.kuko.starcc.computercraft.upgrades.ExampleTurtleUpgrade;
 import net.kuko.starcc.event.ServerEvents;
 import net.kuko.starcc.registries.TurtleUpgradesRegistry;
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.neoforge.registries.RegisterEvent;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
