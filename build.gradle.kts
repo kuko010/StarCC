@@ -162,6 +162,9 @@ val generateModMetadata = tasks.register<ProcessResources>("generateModMetadata"
         "mod_name"                to project.property("mod_name"),
         "mod_license"             to project.property("mod_license"),
         "mod_version"             to project.property("mod_version"),
+
+        "starcatcher_version"     to project.property("starcatcher_version"),
+        "cct_version"             to project.property("cct_version")
     )
     inputs.properties(replaceProperties)
     expand(replaceProperties)
