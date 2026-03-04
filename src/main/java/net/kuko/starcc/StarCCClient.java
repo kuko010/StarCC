@@ -25,6 +25,7 @@ public class StarCCClient {
     @SubscribeEvent
     public static void registerTurtleModellers(RegisterTurtleModellersEvent event) {
         event.register(TurtleUpgradesRegistry.EXAMPLE_TURTLE_UPGRADE, TurtleUpgradeModeller.flatItem());
+        event.register(TurtleUpgradesRegistry.STARCATCHER_GUIDE_TURTLE_UPGRADE_UPGRADE, TurtleUpgradeModeller.flatItem());
     }
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
