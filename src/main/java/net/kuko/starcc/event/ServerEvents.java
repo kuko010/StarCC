@@ -4,14 +4,14 @@ import net.kuko.starcc.StarCC;
 import net.minecraft.locale.Language;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.event.tick.PlayerTickEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 
 public class ServerEvents {
     @SubscribeEvent
-    public void onPlayerTick(PlayerTickEvent.Post event) {
-        Player player = event.getEntity();
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        Player player = event.player;
         if (player.isCrouching()) {
             if (!player.level().isClientSide) {
                 if (player.tickCount % 20 != 0) return;

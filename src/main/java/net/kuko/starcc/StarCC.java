@@ -27,6 +27,8 @@ public class StarCC {
         modEventBus.addListener(this::commonSetup);
 
         modEventBus.addListener(TurtleUpgradesRegistry::register);
+        TurtleUpgradesRegistry.register(modEventBus);
+
 
         MinecraftForge.EVENT_BUS.register(this);
         MinecraftForge.EVENT_BUS.register(new ServerEvents());

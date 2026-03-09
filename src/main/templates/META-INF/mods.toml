@@ -48,6 +48,7 @@ config="${mod_id}.mixins.json"
 [[dependencies.${mod_id}]]
     modId="minecraft"
     type="required"
+    mandatory = true        # <-- this field is missing somewhere
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
@@ -58,6 +59,7 @@ config="${mod_id}.mixins.json"
     versionRange="[${starcatcher_version},)"
     ordering="AFTER"
     side="BOTH"
+    mandatory = true        # <-- this field is missing somewhere
 
 [[dependencies.${mod_id}]]
     modId="computercraft"
@@ -65,6 +67,7 @@ config="${mod_id}.mixins.json"
     versionRange="[${cct_version},)"
     ordering="AFTER"
     side="BOTH"
+    mandatory = true        # <-- this field is missing somewhere
 
 # Features are specific properties of the game environment, that you may want to declare you require. This example declares
 # that your mod requires GL version 3.2 or higher. Other features will be added. They are side aware so declaring this won't

@@ -4,17 +4,17 @@ import dan200.computercraft.api.client.turtle.RegisterTurtleModellersEvent;
 import dan200.computercraft.api.client.turtle.TurtleUpgradeModeller;
 import net.kuko.starcc.registries.TurtleUpgradesRegistry;
 import net.minecraft.client.Minecraft;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModContainer;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
 
 // This class will not load on dedicated servers. Accessing client side code from here is safe.
-@Mod(value = StarCC.MOD_ID, dist = Dist.CLIENT)
+@Mod(value = StarCC.MOD_ID)
 // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-@EventBusSubscriber(modid = StarCC.MOD_ID, value = Dist.CLIENT)
+@Mod.EventBusSubscriber(modid = StarCC.MOD_ID, value = Dist.CLIENT)
 public class StarCCClient {
     public StarCCClient(ModContainer container) {
         // Allows NeoForge to create a config screen for this mod's configs.
@@ -24,7 +24,9 @@ public class StarCCClient {
 
     @SubscribeEvent
     public static void registerTurtleModellers(RegisterTurtleModellersEvent event) {
-        event.register(TurtleUpgradesRegistry.STARCATCHER_GUIDE_TURTLE_UPGRADE_UPGRADE, TurtleUpgradeModeller.flatItem());
+      //  event.register(TurtleUpgradesRegistry.STARCATCHER_GUIDE_TURTLE_UPGRADE_UPGRADE, TurtleUpgradeModeller.flatItem());
+        event.register(TurtleUpgradesRegistry.EXAMPLE_TURTLE_UPGRADE, TurtleUpgradeModeller.flatItem());
+
     }
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
