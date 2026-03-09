@@ -1,5 +1,6 @@
 package net.kuko.starcc.computercraft.peripherals;
 
+/*
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.ITurtleAccess;
@@ -26,4 +27,4 @@ public class StarcatcherGuidePeripheral implements IPeripheral {
     public boolean equals(@Nullable IPeripheral other) {
         return this == other;
     }
-}
+}*/

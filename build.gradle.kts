@@ -50,6 +50,9 @@ dependencies {
     implementation("maven.modrinth:starcatcher:${property("starcatcher_version")}-FORGE-${property("minecraft_version")}")
 
     /* Isometric renders */
+    runtimeOnly("maven.modrinth:connector:1.0.0-beta.48+1.20.1")
+    runtimeOnly("maven.modrinth:isometric-renders:0.4.5+1.20")
+    runtimeOnly("maven.modrinth:forgified-fabric-api:0.92.6+1.11.14+1.20.1")
 
 }
 

@@ -1,5 +1,6 @@
 package net.kuko.starcc.computercraft.upgrades;
 
+/*
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.AbstractTurtleUpgrade;
 import dan200.computercraft.api.turtle.ITurtleAccess;
@@ -28,3 +29,4 @@ public class StarcatcherGuideTurtleUpgrade extends AbstractTurtleUpgrade {
     }
 }
 
+*/
