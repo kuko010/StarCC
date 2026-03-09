@@ -47,10 +47,8 @@ dependencies {
     runtimeOnly("cc.tweaked:cc-tweaked-${property("minecraft_version")}-forge:${property("cct_version")}")
 
     /* Starcatcher */
-  //  implementation("maven.modrinth:starcatcher:${property("starcatcher_version")}-NEOFORGE-${property("minecraft_version")}")
-    implementation(files(".lib/starcatcher-2.3-PREVIEW-3-NEOFORGE-1.21.1.jar"))
+    implementation("maven.modrinth:starcatcher:${property("starcatcher_version")}-NEOFORGE-${property("minecraft_version")}")
 }
-
 
 base {
     archivesName = project.property("mod_id") as String
