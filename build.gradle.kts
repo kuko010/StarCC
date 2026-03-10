@@ -11,7 +11,7 @@ tasks.named<Wrapper>("wrapper") {
     // documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
     // file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
     // (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
-    distributionType = Wrapper.DistributionType.BIN
+    distributionType = Wrapper.DistributionType.ALL
 }
 
 version = project.property("mod_version") as String
@@ -196,6 +196,9 @@ publishing {
 
 tasks.withType<JavaCompile>().configureEach {
     options.encoding = "UTF-8" // Use the UTF-8 charset for Java compilation
+}
+java {
+    withSourcesJar()
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
