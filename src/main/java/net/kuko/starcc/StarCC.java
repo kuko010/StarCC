@@ -1,8 +1,6 @@
 package net.kuko.starcc;
 
 import net.kuko.starcc.event.ServerEvents;
-import net.kuko.starcc.registries.TurtleUpgradesRegistry;
-import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 
@@ -13,9 +11,11 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class StarCC {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        modEventBus.addListener(TurtleUpgradesRegistry::register);
+        modEventBus.addListener(net.kuko.starcc.registries.TurtleUpgradesRegistry::register);
 
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new ServerEvents());
