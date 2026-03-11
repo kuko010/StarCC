@@ -4,6 +4,7 @@ import net.kuko.starcc.event.ServerEvents;
 
 import com.mojang.logging.LogUtils;
 
+import net.kuko.starcc.registries.UpgradesRegistry;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -11,13 +12,10 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
 import org.slf4j.Logger;
-
-import java.util.List;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(StarCC.MOD_ID)
@@ -29,7 +27,7 @@ public class StarCC {
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
-        modEventBus.addListener(net.kuko.starcc.registries.TurtleUpgradesRegistry::register);
+        modEventBus.addListener(UpgradesRegistry::register);
 
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new ServerEvents());

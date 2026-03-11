@@ -1,0 +1,26 @@
+package net.kuko.starcc.computercraft.turtle.upgrades;
+
+import com.wdiscute.starcatcher.Starcatcher;
+import dan200.computercraft.api.turtle.AbstractTurtleUpgrade;
+import dan200.computercraft.api.turtle.ITurtleUpgrade;
+import dan200.computercraft.api.turtle.TurtleUpgradeType;
+import dan200.computercraft.api.upgrades.UpgradeType;
+import net.kuko.starcc.registries.UpgradesRegistry;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+
+public class StarcatcherRodTurtleUpgrade extends AbstractTurtleUpgrade {
+    public StarcatcherRodTurtleUpgrade(ItemStack stack) {
+        super(TurtleUpgradeType.PERIPHERAL, Component.translatable("upgrade.starcc.starcatcher_rod.adjective"), stack);
+    }
+
+    /**
+     * Get the type of this upgrade.
+     *
+     * @return The type of this upgrade.
+     */
+    @Override
+    public UpgradeType<? extends ITurtleUpgrade> getType() {
+        return UpgradesRegistry.STARCATCHER_ROD_TURTLE_UPGRADE_UPGRADE;
+    }
+}

@@ -1,6 +1,8 @@
 package net.kuko.starcc;
 
 import dan200.computercraft.api.client.turtle.RegisterTurtleModellersEvent;
+import net.kuko.starcc.computercraft.client.ItemRendersUtils;
+import net.kuko.starcc.registries.UpgradesRegistry;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -22,8 +24,9 @@ public class StarCCClient {
 
     @SubscribeEvent
     public static void registerTurtleModellers(RegisterTurtleModellersEvent event) {
-        //event.register(TurtleUpgradesRegistry.STARCATCHER_GUIDE_TURTLE_UPGRADE_UPGRADE, (ItemRendersUtils::itemRender));
+        event.register(UpgradesRegistry.STARCATCHER_ROD_TURTLE_UPGRADE_UPGRADE, (ItemRendersUtils::itemRender));
     }
+
     @SubscribeEvent
     static void onClientSetup(FMLClientSetupEvent event) {
         // Some client setup code
