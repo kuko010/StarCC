@@ -23,11 +23,6 @@ public class StarcatcherRodPeripheral implements IPeripheral {
         return "starcatcher_rod";
     }
 
-    @LuaFunction
-    public final String getEntry() {
-        return "no";
-    }
-
 
     /**
      * Determine whether this peripheral is equivalent to another one.
