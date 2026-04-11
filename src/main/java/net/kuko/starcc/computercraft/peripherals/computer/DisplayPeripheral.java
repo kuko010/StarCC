@@ -133,6 +133,12 @@ public class DisplayPeripheral implements IPeripheral {
         return out;
     }
 
+    private SignedGuide getGuide() {
+        ItemStack stack = displayBlock.getItem();
+        if (stack.isEmpty()) return null;
+        return SCDataComponents.get(stack, SCDataComponents.SIGNED_GUIDE);
+    }
+
     private static @NonNull Map<String, Object> putStats(FishCaughtCounter entry) {
         Map<String, Object> fMap = new LinkedHashMap<>();
 
