@@ -1,11 +1,9 @@
-package net.kuko.starcc.computercraft.turtle.upgrades;
+package net.kuko.starcc.computercraft.upgrades.turtle;
 
-import com.wdiscute.starcatcher.Starcatcher;
-import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import dan200.computercraft.api.turtle.*;
 import dan200.computercraft.api.upgrades.UpgradeType;
-import net.kuko.starcc.computercraft.peripherals.StarcatcherRodPeripheral;
+import net.kuko.starcc.computercraft.peripherals.turtle.StarcatcherRodPeripheral;
 import net.kuko.starcc.registries.UpgradesRegistry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;

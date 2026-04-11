@@ -39,6 +39,17 @@ repositories {
             includeGroup("maven.modrinth")
         }
     }
+    /* Curse */
+    exclusiveContent {
+        forRepository {
+            maven {
+                url = uri("https://cursemaven.com")
+            }
+        }
+        filter {
+            includeGroup( "curse.maven")
+        }
+    }
 }
 
 dependencies {
@@ -47,8 +58,13 @@ dependencies {
     runtimeOnly("cc.tweaked:cc-tweaked-${property("minecraft_version")}-forge:${property("cct_version")}")
 
     /* Starcatcher */
-    implementation("maven.modrinth:starcatcher:${property("starcatcher_version")}-NEOFORGE-${property("minecraft_version")}")
-    //implementation(files(".lib/starcatcher-2.3-PREVIEW-3-NEOFORGE-1.21.1.jar"))
+   // implementation("maven.modrinth:starcatcher:${property("starcatcher_version")}-NEOFORGE-${property("minecraft_version")}")
+    implementation(files("libs/starcatcher-2.3-PREVIEW-8-NEOFORGE-1.21.1.jar"))
+     /* For type-checking smh */
+    compileOnly("maven.modrinth:tiny-multiblock-lib:${property("tiny_multiblock_lib_version") as String}")
+
+    /* Runtimes */
+    implementation("curse.maven:shutup-opengl-1299257:6725177")
 }
 
 
