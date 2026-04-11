@@ -155,6 +155,54 @@ public class DisplayPeripheral implements IPeripheral {
         return fMap;
     }
 
+    private @NonNull Map<String, Object> putAdvancedStats(FishCaughtCounter entry, ResourceLocation fish) {
+        Map<String, Object> fMap = new LinkedHashMap<>();
+        Level level = displayBlock.getLevel();
+        SignedGuide guide = getGuide();
+        FishProperties fishProperties = level.registryAccess().registryOrThrow(Starcatcher.FISH_REGISTRY_KEY).get(fish);
+        Player player = level.getServer().getPlayerList().getPlayer(guide.owner());
+
+
+        //todo: make this to be only in table when "Telescope" is present too
+        FishProperties.Star star = fishProperties.star();
+        Map<String, Object> starMap = new LinkedHashMap<>();
+        starMap.put("name", star.name());
+        starMap.put("x", star.x());
+        starMap.put("y", star.y());
+        starMap.put("connections", star.connections());
+        starMap.put("debugColor", star.debugColor());
+        fMap.put("star", starMap);
+
+        FishProperties.Rarity rarity = fishProperties.rarity();
+        Map<String, Object> rarityMap = new LinkedHashMap<>();
+        rarityMap.put("rarity", rarity.toString());
+        rarityMap.put("serializedName", rarity.getSerializedName());
+        rarityMap.put("xp", rarity.getXp());
+        fMap.put("rarity", rarityMap);
+
+        List<AbstractFishRestriction> restrictions = fishProperties.restrictions();
+        Map<String, Object> restrictionsMap = new LinkedHashMap<>();
+        for (var restriction : restrictions) {
+            if (!restriction.isEnabled()) continue;
+            AbstractFishRestriction.Context context = GUIDE_ENTRY;
+            assert player != null;
+            Component description = restriction.getDescription(level, fishProperties, player, AbstractFishRestriction.Context.GUIDE_ENTRY);
+            List<Component> hover = restriction.getHover(level, fishProperties, player, AbstractFishRestriction.Context.GUIDE_ENTRY);
+            List<Component> blacklist = restriction.getBlacklist(level, fishProperties, player, AbstractFishRestriction.Context.GUIDE_ENTRY);
+
+            restrictionsMap.put("description", description.getString());
+            List<String> hoverList = List.of();
+            hover.forEach((component -> hoverList.add(component.getString())));
+            restrictionsMap.put("hover", hoverList);
+
+            List<String> blackList = List.of();
+            blacklist.forEach((component -> hoverList.add(component.getString())));
+            restrictionsMap.put("blacklist", blackList);
+        }
+        fMap.put("restrictions", restrictionsMap);
+        return fMap;
+    }
+
     @Override
     public String getType() {
         return "sc_display";
