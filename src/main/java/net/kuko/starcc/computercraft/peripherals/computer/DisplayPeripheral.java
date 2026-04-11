@@ -25,6 +25,49 @@ public class DisplayPeripheral implements IPeripheral {
     }
 
     @LuaFunction(mainThread = true)
+    public Object[] getOwner() {
+        SignedGuide guide = getGuide();
+        if (guide == null) return new Object[]{false, "No signed guide"};
+        GameProfile profile = displayBlock.getLevel().getServer().getProfileCache().get(guide.owner()).orElse(null);
+        if (profile != null) {
+            return new Object[]{true, guide.owner().toString(), profile.getName()};
+        } else {
+            return new Object[]{true, guide.owner().toString()};
+        }
+    }
+
+    @LuaFunction(mainThread = true)
+    public Object[] getFishList() {
+        SignedGuide guide = getGuide();
+        if (guide == null) return new Object[]{false, "No signed guide"};
+        List<String> fishNames = guide.fishesCaught().keySet().stream()
+                .map(ResourceLocation::toString)
+                .toList();
+        return new Object[]{true, fishNames};
+    }
+
+    @LuaFunction(mainThread = true)
+    public Object[] hasFish(String fish) {
+        SignedGuide guide = getGuide();
+        if (guide == null) return new Object[]{false, "No signed guide"};
+        ResourceLocation fishLoc;
+        if (fish.contains(":")) {
+            fishLoc = ResourceLocation.tryParse(fish);
+        } else {
+            fishLoc = ResourceLocation.fromNamespaceAndPath(Starcatcher.MOD_ID, fish);
+        }
+        if (fishLoc == null) return new Object[]{false, "Invalid fish ID"};
+        return new Object[]{true, guide.fishesCaught().containsKey(fishLoc)};
+    }
+
+    @LuaFunction(mainThread = true)
+    public Object[] getFishCount() {
+        SignedGuide guide = getGuide();
+        if (guide == null) return new Object[]{false, "No signed guide"};
+        return new Object[]{true, guide.fishesCaught().size()};
+    }
+
+    @LuaFunction(mainThread = true)
     public Object[] getRawData() {
         ItemStack stack = displayBlock.getItem();
         if (stack.isEmpty()) {
