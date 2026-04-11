@@ -4,6 +4,7 @@ import net.kuko.starcc.event.ServerEvents;
 
 import com.mojang.logging.LogUtils;
 
+import net.kuko.starcc.registries.PeripheralRegistry;
 import net.kuko.starcc.registries.UpgradesRegistry;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.neoforged.bus.api.IEventBus;
@@ -28,6 +29,7 @@ public class StarCC {
         modEventBus.addListener(this::commonSetup);
 
         modEventBus.addListener(UpgradesRegistry::register);
+        modEventBus.addListener(PeripheralRegistry::register);
 
         NeoForge.EVENT_BUS.register(this);
         NeoForge.EVENT_BUS.register(new ServerEvents());

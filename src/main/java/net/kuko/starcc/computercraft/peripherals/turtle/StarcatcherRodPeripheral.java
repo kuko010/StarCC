@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 
 public class StarcatcherRodPeripheral implements IPeripheral {
     private static ItemStack getItem() {
-        return new ItemStack(ModItems.ROD.get());
+        return new ItemStack(SCItems.ROD.get());
     }
 
     /**
@@ -15,7 +15,6 @@ public class StarcatcherRodPeripheral implements IPeripheral {
      * This can be queried from lua by calling {@code peripheral.getType()}
      *
      * @return A string identifying the type of peripheral.
-     * @see PeripheralType#getPrimaryType()
      */
     @Override
     public String getType() {
