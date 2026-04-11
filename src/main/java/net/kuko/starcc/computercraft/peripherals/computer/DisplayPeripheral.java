@@ -23,6 +23,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 import static com.wdiscute.starcatcher.registry.fishrestrictions.AbstractFishRestriction.Context.GUIDE_ENTRY;
+import static net.kuko.starcc.computercraft.peripherals.computer.DisplayPeripheralUtils.*;
 
 public class DisplayPeripheral implements IPeripheral {
     private final DisplayBlockEntity displayBlock;
@@ -44,10 +45,9 @@ public class DisplayPeripheral implements IPeripheral {
         }
     }
 
-
     @LuaFunction(mainThread = true)
     public Object[] getOwner() {
-        SignedGuide guide = getGuide();
+        SignedGuide guide = getGuide(displayBlock);
         if (guide == null) return new Object[]{false, "No signed guide"};
         assert displayBlock.getLevel() != null;
         GameProfile profile = displayBlock.getLevel().getServer().getProfileCache().get(guide.owner()).orElse(null);
@@ -60,7 +60,7 @@ public class DisplayPeripheral implements IPeripheral {
 
     @LuaFunction(mainThread = true)
     public Object[] getFishList() {
-        SignedGuide guide = getGuide();
+        SignedGuide guide = getGuide(displayBlock);
         if (guide == null) return new Object[]{false, "No signed guide"};
         List<String> fishNames = guide.fishesCaught().keySet().stream()
                 .map(ResourceLocation::toString)
@@ -70,7 +70,7 @@ public class DisplayPeripheral implements IPeripheral {
 
     @LuaFunction(mainThread = true)
     public Object[] hasFish(String fish) {
-        SignedGuide guide = getGuide();
+        SignedGuide guide = getGuide(displayBlock);
         if (guide == null) return new Object[]{false, "No signed guide"};
         ResourceLocation fishLoc;
         if (fish.contains(":")) {
@@ -84,7 +84,7 @@ public class DisplayPeripheral implements IPeripheral {
 
     @LuaFunction(mainThread = true)
     public Object[] getFishCount() {
-        SignedGuide guide = getGuide();
+        SignedGuide guide = getGuide(displayBlock);
         if (guide == null) return new Object[]{false, "No signed guide"};
         return new Object[]{true, guide.fishesCaught().size()};
     }
@@ -102,15 +102,13 @@ public class DisplayPeripheral implements IPeripheral {
             return new Object[]{false, "Item in display is not a signed guide"};
         }
 
-        return new Object[]{true, getData(advanced)};
+        return new Object[]{true, getData(advanced, displayBlock)};
     }
-
-
 
     @LuaFunction(mainThread = true)
     public Object[] getFish(String fish, Optional<Boolean> withAdvanced) {
         boolean advanced = withAdvanced.orElse(false);
-        SignedGuide guide = getGuide();
+        SignedGuide guide = getGuide(displayBlock);
         if (guide == null) {
             return new Object[]{false, "No signed guide in display"};
         }
@@ -133,141 +131,14 @@ public class DisplayPeripheral implements IPeripheral {
         Map<String, Object> fishMap = new LinkedHashMap<>();
         fishMap.put("fish", fishLoc.toString());  // was: fishLoc
         if (advanced) {
-            fishMap.put("fishData", putStatsAdvanced(data, fishLoc)); // was: putAdvancedStats
+            fishMap.put("fishData", putStatsAdvanced(data, fishLoc, displayBlock, getGuide(displayBlock))); // was: putAdvancedStats
         } else {
             fishMap.put("fishData", putStats(data, fishLoc));
         }
         return new Object[]{true, fishMap};
     }
 
-    private Map<String, Object> getData(boolean advanced) {
-        SignedGuide guide = getGuide();
 
-        if (guide == null) return Map.of();
-
-        Map<String, Object> out = new LinkedHashMap<>();
-
-        out.put("owner", guide.owner().toString());
-        out.put("signature", guide.signature());
-        out.put("date", guide.date());
-
-        Map<String, Object> fishes = new LinkedHashMap<>();
-        for (var entry : guide.fishesCaught().entrySet()) {
-            Map<String, Object> fMap;
-            if (advanced) {
-                fMap = putStatsAdvanced(entry.getValue(), entry.getKey());
-            } else {
-                fMap = putStats(entry.getValue(), entry.getKey());
-            }
-
-            fishes.put(entry.getKey().toString(), fMap);
-        }
-        out.put("fishesCaught", fishes);
-        return out;
-    }
-
-    private SignedGuide getGuide() {
-        ItemStack stack = displayBlock.getItem();
-        if (stack.isEmpty()) return null;
-        return SCDataComponents.get(stack, SCDataComponents.SIGNED_GUIDE);
-    }
-
-    private @NonNull Map<String, Object> putStats(FishCaughtCounter entry, ResourceLocation fish) {
-        Map<String, Object> fMap = new LinkedHashMap<>();
-
-        fMap.put("count", entry.count());
-        fMap.put("fastestTicks", entry.fastestTicks());
-        fMap.put("averageTicks", entry.averageTicks());
-        fMap.put("size", entry.size());
-        fMap.put("weight", entry.weight());
-        fMap.put("percentile", entry.percentile());
-        fMap.put("firstCatch", entry.firstCatch());
-        fMap.put("caughtGolden", entry.caughtGolden());
-        fMap.put("perfectCatch", entry.perfectCatch());
-        fMap.put("hasGuideNotification", entry.hasGuideNotification());
-        return fMap;
-    }
-
-    private @NonNull Map<String, Object> putStatsAdvanced(FishCaughtCounter entry, ResourceLocation fish) {
-        Map<String, Object> fMap = new LinkedHashMap<>();
-
-        fMap.put("count", entry.count());
-        fMap.put("fastestTicks", entry.fastestTicks());
-        fMap.put("averageTicks", entry.averageTicks());
-        fMap.put("size", entry.size());
-        fMap.put("weight", entry.weight());
-        fMap.put("percentile", entry.percentile());
-        fMap.put("firstCatch", entry.firstCatch());
-        fMap.put("caughtGolden", entry.caughtGolden());
-        fMap.put("perfectCatch", entry.perfectCatch());
-        fMap.put("hasGuideNotification", entry.hasGuideNotification());
-
-        fMap.put("advancedStats", putAdvancedStats(entry, fish));
-
-        return fMap;
-    }
-
-    private @NonNull Map<String, Object> putAdvancedStats(FishCaughtCounter entry, ResourceLocation fish) {
-        Map<String, Object> fMap = new LinkedHashMap<>();
-        Level level = displayBlock.getLevel();
-        if (level == null) return fMap;
-
-        SignedGuide guide = getGuide();
-        if (guide == null) return fMap;
-
-        FishProperties fishProperties = FishProperties.getFP(level, fish);
-        if (fishProperties == null) return fMap;
-
-        // Player may be offline – handle gracefully
-        Player player = level.getServer().getPlayerList().getPlayer(guide.owner());
-
-        // Star data (always included for now)
-        FishProperties.Star star = fishProperties.star();
-        if (star != FishProperties.Star.DEFAULT) {
-            Map<String, Object> starMap = new LinkedHashMap<>();
-            starMap.put("name", star.name());
-            starMap.put("x", star.x());
-            starMap.put("y", star.y());
-            starMap.put("connections", star.connections());
-            starMap.put("debugColor", star.debugColor());
-            fMap.put("star", starMap);
-        }
-
-        // Rarity data
-        FishProperties.Rarity rarity = fishProperties.rarity();
-        Map<String, Object> rarityMap = new LinkedHashMap<>();
-        rarityMap.put("name", rarity.getSerializedName());
-        rarityMap.put("xp", rarity.getXp());
-        fMap.put("rarity", rarityMap);
-
-        // Restrictions – build a list of maps
-        List<Map<String, Object>> restrictionsList = new ArrayList<>();
-        for (AbstractFishRestriction restriction : fishProperties.restrictions()) {
-            if (!restriction.isEnabled()) continue;
-
-            Map<String, Object> restrictionMap = new LinkedHashMap<>();
-            // Description
-            Component desc = restriction.getDescription(level, fishProperties, player, GUIDE_ENTRY);
-            restrictionMap.put("description", desc.getString());
-
-            // Hover texts
-            List<Component> hoverComponents = restriction.getHover(level, fishProperties, player, GUIDE_ENTRY);
-            List<String> hoverStrs = new ArrayList<>();
-            for (Component c : hoverComponents) hoverStrs.add(c.getString());
-            restrictionMap.put("hover", hoverStrs);
-
-            // Blacklist texts
-            List<Component> blacklistComponents = restriction.getBlacklist(level, fishProperties, player, GUIDE_ENTRY);
-            List<String> blacklistStrs = new ArrayList<>();
-            for (Component c : blacklistComponents) blacklistStrs.add(c.getString());
-            restrictionMap.put("blacklist", blacklistStrs);
-
-            restrictionsList.add(restrictionMap);
-        }
-        fMap.put("restrictions", restrictionsList);
-
-        return fMap;
-    }
 
     @Override
     public String getType() {
