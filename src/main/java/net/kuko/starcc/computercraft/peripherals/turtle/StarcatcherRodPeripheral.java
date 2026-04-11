@@ -1,6 +1,6 @@
 package net.kuko.starcc.computercraft.peripherals.turtle;
 
-import com.wdiscute.starcatcher.registry.ModItems;
+import com.wdiscute.starcatcher.registry.SCItems;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.world.item.ItemStack;
 import org.jspecify.annotations.Nullable;
