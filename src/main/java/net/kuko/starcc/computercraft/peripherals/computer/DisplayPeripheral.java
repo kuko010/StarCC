@@ -1,28 +1,19 @@
 package net.kuko.starcc.computercraft.peripherals.computer;
 
-import com.mojang.authlib.GameProfile;
 import com.wdiscute.starcatcher.Starcatcher;
 import com.wdiscute.starcatcher.blocks.display.DisplayBlockEntity;
 import com.wdiscute.starcatcher.io.FishCaughtCounter;
 import com.wdiscute.starcatcher.io.SCDataComponents;
-import com.wdiscute.starcatcher.registry.FishProperties;
 import com.wdiscute.starcatcher.registry.SignedGuide;
-import com.wdiscute.starcatcher.registry.fishrestrictions.AbstractFishRestriction;
 import dan200.computercraft.api.lua.LuaFunction;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
-import static com.wdiscute.starcatcher.registry.fishrestrictions.AbstractFishRestriction.Context.GUIDE_ENTRY;
 import static net.kuko.starcc.computercraft.peripherals.computer.DisplayPeripheralUtils.*;
 
 public class DisplayPeripheral implements IPeripheral {
@@ -46,18 +37,57 @@ public class DisplayPeripheral implements IPeripheral {
     }
 
     @LuaFunction(mainThread = true)
-    public Object[] getOwner() {
+    public Map<String, Object> getBookInfo() {
         SignedGuide guide = getGuide(displayBlock);
-        if (guide == null) return new Object[]{false, "No signed guide"};
-        assert displayBlock.getLevel() != null;
-        GameProfile profile = displayBlock.getLevel().getServer().getProfileCache().get(guide.owner()).orElse(null);
-        if (profile != null) {
-            return new Object[]{true, guide.owner().toString(), profile.getName()};
-        } else {
-            return new Object[]{true, guide.owner().toString()};
+
+        // Return a simple error map if no guide exists
+        if (guide == null) {
+            return Map.of("success", false, "error", "No signed guide");
         }
+
+        Map<String, Object> info = new HashMap<>();
+        info.put("success", true);
+        info.put("signature", guide.signature());
+        info.put("date", guide.date());
+
+        // Handle the Profile/Owner logic
+        var profileCache = displayBlock.getLevel().getServer().getProfileCache();
+        var profile = profileCache.get(guide.owner()).orElse(null);
+
+        if (profile != null) {
+            // Lua will see this as a list/table: { uuid, name }
+            info.put("owner", List.of(guide.owner().toString(), profile.getName()));
+        } else {
+            info.put("owner", List.of(guide.owner().toString()));
+        }
+
+        return info;
     }
 
+    //region QoL slop
+    @LuaFunction(mainThread = true)
+    public Object getOwner() {
+        Map<String, Object> info = getBookInfo();
+        // Simply return the owner part of the info map
+        return info.getOrDefault("owner", null);
+    }
+
+    @LuaFunction(mainThread = true)
+    public Object getDate() {
+        Map<String, Object> info = getBookInfo();
+        // Simply return the owner part of the info map
+        return info.getOrDefault("date", null);
+    }
+
+    @LuaFunction(mainThread = true)
+    public Object getSignature() {
+        Map<String, Object> info = getBookInfo();
+        // Simply return the owner part of the info map
+        return info.getOrDefault("signature", null);
+    }
+    //endregion
+
+    //region Fish Related
     @LuaFunction(mainThread = true)
     public Object[] getFishList() {
         SignedGuide guide = getGuide(displayBlock);
@@ -138,6 +168,7 @@ public class DisplayPeripheral implements IPeripheral {
         return new Object[]{true, fishMap};
     }
 
+    //endregion
 
 
     @Override
