@@ -58,9 +58,7 @@ dependencies {
     runtimeOnly("cc.tweaked:cc-tweaked-${property("minecraft_version")}-forge:${property("cct_version")}")
 
     /* Starcatcher */
-   // implementation("maven.modrinth:starcatcher:${property("starcatcher_version")}-NEOFORGE-${property("minecraft_version")}")
-    compileOnly(files("libs/starcatcher-2.3-PREVIEW-8-NEOFORGE-1.21.1.jar"))
-    runtimeOnly(files("libs/starcatcher-2.3-PREVIEW-8-NEOFORGE-1.21.1.jar"))
+    implementation("maven.modrinth:starcatcher:${property("starcatcher_version")}-NEOFORGE-${property("minecraft_version")}")
     /* For type-checking smh */
     compileOnly("maven.modrinth:tiny-multiblock-lib:${property("tiny_multiblock_lib_version") as String}")
 
